@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Таблица очков теннисного матча</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .scoreboard-container {
+      width: 100%;
+      max-width: 700px;
+      border-collapse: collapse;
+    }
+    table {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+      font-weight: bold;
+      color: #333;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .player-cell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .score-button {
+      padding: 8px 12px;
+      font-size: 12px;
+      margin-left: 8px;
+      cursor: pointer;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 4px;
+    }
+    .score-button:hover {
+      background-color: #45a049;
+    }
+    .advantage {
+      color: red;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .tiebreak {
+      color: blue;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div class="scoreboard-container">
+  <h2>Теннисный матч</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Игрок</th>
+      <th>Сеты</th>
+      <th>Геймы</th>
+      <th>Поинты</th>
+      <th>Преимущество</th>
+      <th th:if="${isTiebreak}">Тай брейк</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td class="player-cell">
+        <span th:text="${player1.getName()}">Игрок 1</span>
+        <form action="/match-score" method="POST" style="display:inline;">
+          <input type="hidden" name="uuid" th:value="${matchId}">
+          <button type="submit" name="winnerId" th:value="${player1.getId()}" class="score-button">
+            Выиграл очко
+          </button>
+        </form>
+      </td>
+      <td id="player1-sets" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).SET_PLAYER_ONE)}">0</td>
+      <td id="player1-games" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).GAME_PLAYER_ONE)}">0</td>
+      <td id="player1-points" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).POINT_PLAYER_ONE)}">0</td>
+      <td>
+        <span th:if="${score.getPriority(T(org.example.tennismatchscoreboard.services.ScoreEnum).PRIORITY_PLAYER_ONE)}" class="advantage">Преимущество</span>
+      </td>
+      <td th:if="${isTiebreak}" class="tiebreak" th:text="${tieBreakPlayerOne}">Очки тай брейка 1</td>
+    </tr>
+    <tr>
+      <td class="player-cell">
+        <span th:text="${player2.getName()}">Игрок 2</span>
+        <form action="/match-score" method="POST" style="display:inline;">
+          <input type="hidden" name="uuid" th:value="${matchId}">
+          <button type="submit" name="winnerId" th:value="${player2.getId()}" class="score-button">
+            Выиграл очко
+          </button>
+        </form>
+      </td>
+      <td id="player2-sets" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).SET_PLAYER_TWO)}">0</td>
+      <td id="player2-games" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).GAME_PLAYER_TWO)}">0</td>
+      <td id="player2-points" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).POINT_PLAYER_TWO)}">0</td>
+      <td>
+        <span th:if="${score.getPriority(T(org.example.tennismatchscoreboard.services.ScoreEnum).PRIORITY_PLAYER_TWO)}" class="advantage">Преимущество</span>
+      </td>
+      <td th:if="${isTiebreak}" class="tiebreak" th:text="${tieBreakPlayerTwo}">Очки тай брейка 2</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
