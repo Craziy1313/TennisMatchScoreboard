@@ -15,22 +15,35 @@ public class ScoreService {
     {
         winPlayerOne = List.of(ScoreEnum.POINT_PLAYER_ONE, ScoreEnum.GAME_PLAYER_ONE, ScoreEnum.SET_PLAYER_ONE,
                 ScoreEnum.POINT_PLAYER_TWO, ScoreEnum.GAME_PLAYER_TWO, ScoreEnum.SET_PLAYER_TWO,
-                ScoreEnum.PRIORITY_PLAYER_ONE, ScoreEnum.PRIORITY_PLAYER_TWO, ScoreEnum.TIE_BREAK);
+                ScoreEnum.PRIORITY_PLAYER_ONE, ScoreEnum.PRIORITY_PLAYER_TWO, ScoreEnum.TIE_BREAK,
+                ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, ScoreEnum.TIE_BREAK);
 
         winPlayerTwo = List.of(ScoreEnum.POINT_PLAYER_TWO, ScoreEnum.GAME_PLAYER_TWO, ScoreEnum.SET_PLAYER_TWO,
                 ScoreEnum.POINT_PLAYER_ONE, ScoreEnum.GAME_PLAYER_ONE, ScoreEnum.SET_PLAYER_ONE,
-                ScoreEnum.PRIORITY_PLAYER_TWO, ScoreEnum.PRIORITY_PLAYER_ONE, ScoreEnum.TIE_BREAK);
+                ScoreEnum.PRIORITY_PLAYER_TWO, ScoreEnum.PRIORITY_PLAYER_ONE, ScoreEnum.TIE_BREAK,
+                ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, ScoreEnum.TIE_BREAK);
     }
+
+    //todo для тайбрейка напишем отдельный метод,
+    // в методах победы игрока сначала будем проверять есть ли флаг на тайбрейке и тогда уходить в другой метод подсчета
 
     public Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> winPlayerOne(
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority) {
 
+        if (playerPriority.get(ScoreEnum.TIE_BREAK)) {
+            score.put(ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, score.get(ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE) + 1);
+            return new Pair<>(score, playerPriority);
+        }
         return ScoreMethod(score, playerPriority, winPlayerOne);
     }
 
     public Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> winPlayerTwo (
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority) {
 
+        if (playerPriority.get(ScoreEnum.TIE_BREAK)) {
+            score.put(ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, score.get(ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO) + 1);
+            return new Pair<>(score, playerPriority);
+        }
         return ScoreMethod(score, playerPriority, winPlayerTwo);
     }
 

@@ -22,11 +22,21 @@ public class NewMatchService {
     }
 
     public UUID newMatch(String player1, String player2) {
-        Player playerOne = new Player();
-        playerOne.setName(player1);
 
-        Player playerTwo = new Player();
-        playerTwo.setName(player2);
+        Player playerOne = playerServices.getPlayerByName(player1);
+        Player playerTwo = playerServices.getPlayerByName(player2);
+
+        if (playerOne == null) {
+            playerServices.savePlayer(playerOne);
+        } else {
+            playerOne = playerServices.getPlayerByName(player1);
+        }
+
+        if (playerTwo == null) {
+            playerServices.savePlayer(playerTwo);
+        } else {
+            playerTwo = playerServices.getPlayerByName(player2);
+        }
 
         playerServices.savePlayer(playerOne);
         playerServices.savePlayer(playerTwo);

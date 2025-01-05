@@ -22,29 +22,15 @@ public class MatchScoreController {
     }
 
     @GetMapping
-    public String matchScore(@RequestParam UUID uuid, Model model) {
-
-        System.out.println("uuid = " + uuid);
+    public String getMatchScore(@RequestParam UUID uuid,
+                                Model model) {
 
         Match match = Match.getMatch(uuid);
-
-        Player player1 = playerServices.getPlayerById(match.getPlayer1ID());
-        Player player2 = playerServices.getPlayerById(match.getPlayer2ID());
-
-        model.addAttribute("player1", player1);
-        model.addAttribute("player2", player2);
-        model.addAttribute("matchId", uuid);
-        model.addAttribute("score", match.getScore());
-
-        model.addAttribute("tieBreakPlayerOne", match.getScore().getTieBreakPlayerOne());
-        model.addAttribute("tieBreakPlayerTwo", match.getScore().getTieBreakPlayerTwo());
-        model.addAttribute("tieBreak", match.getScore().isTieBreak());
-
-        System.out.println(Match.getMatch(uuid));
+        UpdateMatchInfo(uuid, model, match);
 
         return "MatchScore";
-
     }
+
     @PostMapping
     public String updateScore(@RequestParam UUID uuid,
                               @RequestParam int winnerId,
@@ -58,6 +44,13 @@ public class MatchScoreController {
             match.getScore().winPlayerTwo();
         }
 
+        UpdateMatchInfo(uuid, model, match);
+
+        return "MatchScore";
+    }
+
+    private void UpdateMatchInfo(@RequestParam UUID uuid, Model model, Match match) {
+
         Player player1 = playerServices.getPlayerById(match.getPlayer1ID());
         Player player2 = playerServices.getPlayerById(match.getPlayer2ID());
 
@@ -65,12 +58,5 @@ public class MatchScoreController {
         model.addAttribute("player2", player2);
         model.addAttribute("matchId", uuid);
         model.addAttribute("score", match.getScore());
-
-        model.addAttribute("tieBreakPlayerOne", match.getScore().getTieBreakPlayerOne());
-        model.addAttribute("tieBreakPlayerTwo", match.getScore().getTieBreakPlayerTwo());
-        model.addAttribute("isTiebreak", match.getScore().isTieBreak());
-
-        return "MatchScore";
     }
-
 }

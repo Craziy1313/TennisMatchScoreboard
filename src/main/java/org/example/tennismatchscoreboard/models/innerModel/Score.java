@@ -18,15 +18,6 @@ public class Score {
 
     private final ScoreService scoreService;
 
-    @Getter
-    private int tieBreakPlayerOne = 0;
-
-    @Getter
-    private int tieBreakPlayerTwo = 0;
-
-    @Getter
-    boolean tieBreak = true;
-
     /**
      * Дефолтное заполнение таблицы счета при инициализации нового матча
      */
@@ -41,6 +32,8 @@ public class Score {
         score.put(ScoreEnum.GAME_PLAYER_TWO, 0);
         score.put(ScoreEnum.POINT_PLAYER_ONE, 0);
         score.put(ScoreEnum.POINT_PLAYER_TWO, 0);
+        score.put(ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, 0);
+        score.put(ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, 0);
 
         playerPriority.put(ScoreEnum.PRIORITY_PLAYER_ONE, false);
         playerPriority.put(ScoreEnum.PRIORITY_PLAYER_TWO, false);
