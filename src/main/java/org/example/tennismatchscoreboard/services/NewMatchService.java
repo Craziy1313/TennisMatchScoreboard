@@ -26,20 +26,20 @@ public class NewMatchService {
         Player playerOne = playerServices.getPlayerByName(player1);
         Player playerTwo = playerServices.getPlayerByName(player2);
 
+        System.out.println(playerOne);
+        System.out.println(playerTwo);
+
         if (playerOne == null) {
-            playerServices.savePlayer(playerOne);
-        } else {
-            playerOne = playerServices.getPlayerByName(player1);
+            Player playerOneForSave = new Player();
+            playerOneForSave.setName(player1);
+            playerServices.savePlayer(playerOneForSave);
         }
 
         if (playerTwo == null) {
-            playerServices.savePlayer(playerTwo);
-        } else {
-            playerTwo = playerServices.getPlayerByName(player2);
+            Player playerTwoForSave = new Player();
+            playerTwoForSave.setName(player2);
+            playerServices.savePlayer(playerTwoForSave);
         }
-
-        playerServices.savePlayer(playerOne);
-        playerServices.savePlayer(playerTwo);
 
         String matchId = UUID.randomUUID().toString();
         Score score = new Score(scoreService);
