@@ -26,9 +26,6 @@ public class NewMatchService {
         Player playerOne = playerServices.getPlayerByName(player1);
         Player playerTwo = playerServices.getPlayerByName(player2);
 
-        System.out.println(playerOne);
-        System.out.println(playerTwo);
-
         if (playerOne == null) {
             Player playerOneForSave = new Player();
             playerOneForSave.setName(player1);

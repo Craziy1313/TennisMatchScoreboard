@@ -9,27 +9,30 @@ import java.util.List;
 @Service
 public class ScoreService {
 
-    private final List<ScoreEnum> winPlayerOne;
-    private final List<ScoreEnum> winPlayerTwo;
+    private static final List<ScoreEnum> winPlayerOne;
+    private static final List<ScoreEnum> winPlayerTwo;
 
-    {
+     static {
         winPlayerOne = List.of(ScoreEnum.POINT_PLAYER_ONE, ScoreEnum.GAME_PLAYER_ONE, ScoreEnum.SET_PLAYER_ONE,
                 ScoreEnum.POINT_PLAYER_TWO, ScoreEnum.GAME_PLAYER_TWO, ScoreEnum.SET_PLAYER_TWO,
                 ScoreEnum.PRIORITY_PLAYER_ONE, ScoreEnum.PRIORITY_PLAYER_TWO, ScoreEnum.TIE_BREAK,
-                ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, ScoreEnum.TIE_BREAK);
+                ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, ScoreEnum.TIE_BREAK,
+                ScoreEnum.END_GAME);
 
         winPlayerTwo = List.of(ScoreEnum.POINT_PLAYER_TWO, ScoreEnum.GAME_PLAYER_TWO, ScoreEnum.SET_PLAYER_TWO,
                 ScoreEnum.POINT_PLAYER_ONE, ScoreEnum.GAME_PLAYER_ONE, ScoreEnum.SET_PLAYER_ONE,
                 ScoreEnum.PRIORITY_PLAYER_TWO, ScoreEnum.PRIORITY_PLAYER_ONE, ScoreEnum.TIE_BREAK,
-                ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, ScoreEnum.TIE_BREAK);
+                ScoreEnum.TIE_BREAK_POINT_PLAYER_TWO, ScoreEnum.TIE_BREAK_POINT_PLAYER_ONE, ScoreEnum.TIE_BREAK,
+                ScoreEnum.END_GAME);
     }
+/**
+ *   Для Тай-брейка напишем отдельный метод,
+     в методах победы игрока сначала будем проверять есть ли флаг на Тай-брейке и тогда уходить в другой метод подсчета
+     механика Тай-брейка
+     первый у кого будет 7 очков побеждает, проверку надо делать после приплюсования очков,
+     проверка нужна стал ли счет 6-6, если стал, то уходим в метод Тай-брейка
 
-    //todo для тайбрейка напишем отдельный метод,
-    // в методах победы игрока сначала будем проверять есть ли флаг на тайбрейке и тогда уходить в другой метод подсчета
-    // механика тайбрейка
-    // первый у кого будет 7 очков побеждает, проверку надо делать после приплюсования очков,
-    // проверка нужна стал ли счет 6-6, если стал, то уходим в тайбрейк
-
+ */
     public Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> winPlayerOne(
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority) {
 
@@ -71,6 +74,9 @@ public class ScoreService {
                     score.put(winPlayerList.get(3), 0);
                     score.put(winPlayerList.get(4), 0);
                     score.put(winPlayerList.get(2), score.get(winPlayerList.get(2)) + 1);
+                    if (score.get(winPlayerList.get(2)).equals(2)) {
+                        playerPriority.put(winPlayerList.get(12), true);
+                    }
                 }
             } else {
                 if (playerPriority.get(winPlayerList.get(6))) {
@@ -95,6 +101,11 @@ public class ScoreService {
         return new Pair<>(score, playerPriority);
     }
 
+    /**
+     * Метод для подсчета очков при Тай-брейке
+     * @param winPlayerList подстановка листа в данными по заполнению метода в зависимости от того, какой игрок победил
+     */
+
     public Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> tieBreak(
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority, List<ScoreEnum> winPlayerList){
         score.put(winPlayerList.get(9), score.get(winPlayerList.get(9)) + 1);
@@ -110,6 +121,10 @@ public class ScoreService {
 
             score.put(winPlayerList.get(2), score.get(winPlayerList.get(2)) + 1);
             playerPriority.put(winPlayerList.get(11), false);
+
+            if (score.get(winPlayerList.get(2)).equals(2)) {
+                playerPriority.put(winPlayerList.get(12), true);
+            }
         }
         return new Pair<>(score, playerPriority);
     }

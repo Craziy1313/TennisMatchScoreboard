@@ -38,6 +38,7 @@ public class Score {
         playerPriority.put(ScoreEnum.PRIORITY_PLAYER_ONE, false);
         playerPriority.put(ScoreEnum.PRIORITY_PLAYER_TWO, false);
         playerPriority.put(ScoreEnum.TIE_BREAK, false);
+        playerPriority.put(ScoreEnum.END_GAME, false);
     }
 
     @Autowired
@@ -67,6 +68,11 @@ public class Score {
 
     public boolean getPriority(ScoreEnum mapKey) {
         return playerPriority.get(mapKey);
+    }
+
+    public boolean isMatchOver() {
+
+        return playerPriority.get(ScoreEnum.END_GAME);
     }
 
 }

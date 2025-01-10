@@ -13,5 +13,6 @@ public enum ScoreEnum {
 
     PRIORITY_PLAYER_ONE,
     PRIORITY_PLAYER_TWO,
-    TIE_BREAK;
+    TIE_BREAK,
+    END_GAME;
 }

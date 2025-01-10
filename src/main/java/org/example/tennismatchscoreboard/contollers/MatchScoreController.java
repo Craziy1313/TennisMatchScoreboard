@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @Controller
-@RequestMapping ("/match-score")
+@RequestMapping("/match-score")
 public class MatchScoreController {
 
     private final PlayerService playerServices;
@@ -22,12 +22,9 @@ public class MatchScoreController {
     }
 
     @GetMapping
-    public String getMatchScore(@RequestParam UUID uuid,
-                                Model model) {
-
+    public String getMatchScore(@RequestParam UUID uuid, Model model) {
         Match match = Match.getMatch(uuid);
-        UpdateMatchInfo(uuid, model, match);
-
+        updateMatchInfo(uuid, model, match, null); // Передаем null для победителя
         return "MatchScore";
     }
 
@@ -37,20 +34,34 @@ public class MatchScoreController {
                               Model model) {
 
         Match match = Match.getMatch(uuid);
+        String winnerName = null; // Инициализация победителя
 
+        // Обновление очков
         if (winnerId == match.getPlayer1ID()) {
             match.getScore().winPlayerOne();
         } else if (winnerId == match.getPlayer2ID()) {
             match.getScore().winPlayerTwo();
+        };
+
+        // Проверка на победителя
+        if (match.getScore().isMatchOver()) { // Добавьте метод `isMatchOver` в модель `Score`
+            if (winnerId == match.getPlayer1ID()) {
+                winnerName = playerServices.getPlayerById(match.getPlayer1ID()).getName();
+            } else if (winnerId == match.getPlayer2ID()) {
+                winnerName = playerServices.getPlayerById(match.getPlayer2ID()).getName();
+            }
         }
 
-        UpdateMatchInfo(uuid, model, match);
+
+        System.out.println("Winner name: " + winnerName);
+
+        // Передаем имя победителя
+        updateMatchInfo(uuid, model, match, winnerName);
 
         return "MatchScore";
     }
 
-    private void UpdateMatchInfo(@RequestParam UUID uuid, Model model, Match match) {
-
+    private void updateMatchInfo(UUID uuid, Model model, Match match, String winnerName) {
         Player player1 = playerServices.getPlayerById(match.getPlayer1ID());
         Player player2 = playerServices.getPlayerById(match.getPlayer2ID());
 
@@ -58,5 +69,10 @@ public class MatchScoreController {
         model.addAttribute("player2", player2);
         model.addAttribute("matchId", uuid);
         model.addAttribute("score", match.getScore());
+
+        if (winnerName != null) {
+            model.addAttribute("winnerName", winnerName); // Добавляем имя победителя, если есть
+        }
+        System.out.println(model);
     }
 }

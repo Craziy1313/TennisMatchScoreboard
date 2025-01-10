@@ -8,40 +8,49 @@
     body {
       font-family: Arial, sans-serif;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       margin-top: 50px;
     }
+
     h2 {
       text-align: center;
     }
+
     .scoreboard-container {
       width: 100%;
       max-width: 700px;
       border-collapse: collapse;
     }
+
     table {
       width: 100%;
       border: 1px solid #ccc;
       border-radius: 8px;
       overflow: hidden;
     }
+
     th, td {
       padding: 12px;
       text-align: center;
     }
+
     th {
       background-color: #f4f4f4;
       font-weight: bold;
       color: #333;
     }
+
     tr:nth-child(even) {
       background-color: #f9f9f9;
     }
+
     .player-cell {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .score-button {
       padding: 8px 12px;
       font-size: 12px;
@@ -52,17 +61,49 @@
       color: white;
       border-radius: 4px;
     }
+
     .score-button:hover {
       background-color: #45a049;
     }
+
     .advantage {
       color: red;
       font-weight: bold;
       font-size: 0.9em;
     }
+
     .tiebreak {
       color: blue;
       font-weight: bold;
+    }
+
+    #winner-notification {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: green;
+      padding: 10px;
+      border: 2px solid green;
+      border-radius: 8px;
+      background-color: #f0fff0;
+      width: fit-content;
+    }
+
+    .new-match-button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1em;
+      color: white;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .new-match-button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -84,7 +125,7 @@
     <tr>
       <td class="player-cell">
         <span th:text="${player1.getName()}">Игрок 1</span>
-        <form action="/match-score" method="POST" style="display:inline;">
+        <form action="/match-score" method="POST" style="display:inline;" th:if="${winnerName == null}">
           <input type="hidden" name="uuid" th:value="${matchId}">
           <button type="submit" name="winnerId" th:value="${player1.getId()}" class="score-button">
             Выиграл очко
@@ -103,7 +144,7 @@
     <tr>
       <td class="player-cell">
         <span th:text="${player2.getName()}">Игрок 2</span>
-        <form action="/match-score" method="POST" style="display:inline;">
+        <form action="/match-score" method="POST" style="display:inline;" th:if="${winnerName == null}">
           <input type="hidden" name="uuid" th:value="${matchId}">
           <button type="submit" name="winnerId" th:value="${player2.getId()}" class="score-button">
             Выиграл очко
@@ -122,5 +163,14 @@
     </tbody>
   </table>
 </div>
+
+<!-- Уведомление о победителе -->
+<div id="winner-notification" th:if="${winnerName != null}">
+  Победитель: <span th:text="${winnerName}"></span>
+</div>
+
+<!-- Кнопка для перехода на страницу нового матча -->
+<a href="/new-match" class="new-match-button" th:if="${winnerName != null}">Вернуться на страницу нового матча</a>
+
 </body>
 </html>
