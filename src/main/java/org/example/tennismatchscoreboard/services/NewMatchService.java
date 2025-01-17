@@ -1,5 +1,6 @@
 package org.example.tennismatchscoreboard.services;
 
+import org.example.tennismatchscoreboard.exception.PlayerNotFountException;
 import org.example.tennismatchscoreboard.models.innerModel.Match;
 import org.example.tennismatchscoreboard.models.innerModel.Score;
 import org.example.tennismatchscoreboard.models.Player;
@@ -23,26 +24,22 @@ public class NewMatchService {
 
     public UUID newMatch(String player1, String player2) {
 
-        Player playerOne = playerServices.getPlayerByName(player1);
-        Player playerTwo = playerServices.getPlayerByName(player2);
+        Player playerOne = playerServices.getPlayerByName(player1).orElse(null);
+        Player playerTwo = playerServices.getPlayerByName(player2).orElse(null);
 
         if (playerOne == null) {
-            Player playerOneForSave = new Player();
-            playerOneForSave.setName(player1);
-            playerServices.savePlayer(playerOneForSave);
+            playerServices.savePlayer(new Player(player1));
         }
 
         if (playerTwo == null) {
-            Player playerTwoForSave = new Player();
-            playerTwoForSave.setName(player2);
-            playerServices.savePlayer(playerTwoForSave);
+            playerServices.savePlayer(new Player(player2));
         }
 
         String matchId = UUID.randomUUID().toString();
         Score score = new Score(scoreService);
-        Player player1Id = playerServices.getPlayerByName(player1);
-        Player player2Id = playerServices.getPlayerByName(player2);
-        Match match = new Match(player1Id.getId(), player2Id.getId(), score);
+        int player1Id = playerServices.getPlayerByName(player1).orElseThrow(PlayerNotFountException::new).getId();
+        int player2Id = playerServices.getPlayerByName(player2).orElseThrow(PlayerNotFountException::new).getId();
+        Match match = new Match(player1Id, player2Id, score);
 
         Match.addMatch(UUID.fromString(matchId), match);
 

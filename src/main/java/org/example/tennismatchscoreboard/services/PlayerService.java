@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
 @Service
 public class PlayerService {
@@ -21,12 +23,14 @@ public class PlayerService {
         playerRepositories.save(player);
     }
 
-    public Player getPlayerByName(String name) {
-        return playerRepositories.findByName(name);
+    @Transactional (readOnly = true)
+    public Optional<Player> getPlayerByName(String name) {
+        return (playerRepositories.findByName(name));
     }
 
-    public Player getPlayerById(Integer id) {
-        return playerRepositories.findById(id).get();
+    @Transactional (readOnly = true)
+    public Optional<Player> getPlayerById(Integer id) {
+        return (playerRepositories.findById(id));
     }
 
 

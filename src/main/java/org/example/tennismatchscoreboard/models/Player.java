@@ -15,4 +15,11 @@ public class Player {
     @Column (name = "name", unique = true, nullable = false)
     private String name;
 
+    public Player() {
+    }
+
+    public Player(String name) {
+        this.name = name;
+    }
+
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>Player_ONE</th>
+        <th>Player_TWO</th>
+        <th>WINNER</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="match : ${matches}">
+
+
+        <td th:text="${match.getPlayer1().name}"></td>
+        <td th:text="${match.getPlayer2().name}"></td>
+        <td th:text="${match.getWinner().name}"></td>
+    </tr>
+
+    </tbody>
+</table>
+<br/>
+</body>

@@ -12,7 +12,12 @@ public class ScoreService {
     private static final List<ScoreEnum> winPlayerOne;
     private static final List<ScoreEnum> winPlayerTwo;
 
-     static {
+    private static final Integer LOVE = 0;
+    private static final Integer FIRST_POINT = 15;
+    private static final Integer SECOND_POINT = 30;
+    private static final Integer THIRD_POINT = 40;
+
+    static {
         winPlayerOne = List.of(ScoreEnum.POINT_PLAYER_ONE, ScoreEnum.GAME_PLAYER_ONE, ScoreEnum.SET_PLAYER_ONE,
                 ScoreEnum.POINT_PLAYER_TWO, ScoreEnum.GAME_PLAYER_TWO, ScoreEnum.SET_PLAYER_TWO,
                 ScoreEnum.PRIORITY_PLAYER_ONE, ScoreEnum.PRIORITY_PLAYER_TWO, ScoreEnum.TIE_BREAK,

@@ -26,14 +26,9 @@ public class NewMatchController {
 
     @PostMapping
     @ResponseBody
-    public RedirectView saveMatch(
-            @RequestParam String player1,
-            @RequestParam String player2
-    ) {
+    public RedirectView saveMatch(@RequestParam String player1, @RequestParam String player2) {
         UUID matchId = newMatchService.newMatch(player1, player2);
 
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/match-score?uuid=" + matchId);
-        return redirectView;
+        return new RedirectView("/match-score?uuid=" + matchId);
     }
 }

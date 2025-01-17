@@ -1,6 +1,5 @@
 package org.example.tennismatchscoreboard.models.innerModel;
 
-import lombok.Getter;
 import org.antlr.v4.runtime.misc.Pair;
 import org.example.tennismatchscoreboard.services.ScoreEnum;
 import org.example.tennismatchscoreboard.services.ScoreService;

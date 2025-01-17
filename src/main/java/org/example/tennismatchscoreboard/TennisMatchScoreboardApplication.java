@@ -14,7 +14,6 @@ public class TennisMatchScoreboardApplication {
     public TennisMatchScoreboardApplication(PlayerService playerServices) {
         this.playerServices = playerServices;
 
-
     }
     public static void main(String[] args) {
 
