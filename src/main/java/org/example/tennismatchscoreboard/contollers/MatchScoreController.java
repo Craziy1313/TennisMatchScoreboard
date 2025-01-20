@@ -1,10 +1,11 @@
 package org.example.tennismatchscoreboard.contollers;
 
-import org.example.tennismatchscoreboard.services.CurrentMatchService;
+import org.example.tennismatchscoreboard.services.OngoingMatchesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.UUID;
 
@@ -12,26 +13,26 @@ import java.util.UUID;
 @RequestMapping("/match-score")
 public class MatchScoreController {
 
-    private final CurrentMatchService currentMatchService;
+    private final OngoingMatchesService ongoingMatchesService;
 
     @Autowired
-    public MatchScoreController(CurrentMatchService currentMatchService) {
-        this.currentMatchService = currentMatchService;
+    public MatchScoreController(OngoingMatchesService ongoingMatchesService) {
+        this.ongoingMatchesService = ongoingMatchesService;
     }
 
     @GetMapping
     public String getMatchScore(@RequestParam UUID uuid, Model model) {
 
-        currentMatchService.updateMatchInfo(uuid, model, null);
+        ongoingMatchesService.updateMatchInfo(uuid, model, null);
 
         return "MatchScore";
     }
 
     @PostMapping
-    public String updateScore(@RequestParam UUID uuid, @RequestParam int winnerId, Model model) {
+    public String  updateScore(@RequestParam UUID uuid, @RequestParam int winnerId, Model model) {
 
-        String winnerName = currentMatchService.winnerCheck(winnerId, uuid);
-        currentMatchService.updateMatchInfo(uuid, model, winnerName);
+        String winnerName = ongoingMatchesService.winnerCheck(winnerId, uuid);
+        ongoingMatchesService.updateMatchInfo(uuid, model, winnerName);
 
         return "MatchScore";
     }

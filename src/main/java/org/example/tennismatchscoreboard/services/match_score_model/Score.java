@@ -1,8 +1,8 @@
-package org.example.tennismatchscoreboard.models.innerModel;
+package org.example.tennismatchscoreboard.services.match_score_model;
 
 import org.antlr.v4.runtime.misc.Pair;
 import org.example.tennismatchscoreboard.services.ScoreEnum;
-import org.example.tennismatchscoreboard.services.ScoreService;
+import org.example.tennismatchscoreboard.services.MatchScoreCalculationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class Score {
 
     private HashMap<ScoreEnum, Boolean> playerPriority; // <boolean>
 
-    private final ScoreService scoreService;
+    private final MatchScoreCalculationService matchScoreCalculationService;
 
     /**
      * Дефолтное заполнение таблицы счета при инициализации нового матча
@@ -41,13 +41,13 @@ public class Score {
     }
 
     @Autowired
-    public Score(ScoreService scoreService) {
-        this.scoreService = scoreService;
+    public Score(MatchScoreCalculationService matchScoreCalculationService) {
+        this.matchScoreCalculationService = matchScoreCalculationService;
     }
 
     public void winPlayerOne() {
 
-        Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> scoreAfterWin = scoreService.winPlayerOne(score, playerPriority);
+        Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> scoreAfterWin = matchScoreCalculationService.winPlayerOne(score, playerPriority);
 
         score = scoreAfterWin.a;
         playerPriority = scoreAfterWin.b;
@@ -55,7 +55,7 @@ public class Score {
 
     public void winPlayerTwo() {
 
-        Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> scoreAfterWin = scoreService.winPlayerTwo(score, playerPriority);
+        Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> scoreAfterWin = matchScoreCalculationService.winPlayerTwo(score, playerPriority);
 
         score = scoreAfterWin.a;
         playerPriority = scoreAfterWin.b;
