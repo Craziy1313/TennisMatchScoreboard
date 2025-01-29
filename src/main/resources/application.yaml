@@ -1,0 +1,57 @@
+debug: false
+
+server:
+  port: 8081
+  error:
+    include-message: always
+    whitelabel:
+      enabled: false
+  servlet:
+    encoding:
+      charset: utf-8
+    context-path: /
+
+spring:
+  application:
+    name: JM Spring Boot Security with Fetch API
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5400/tennisdb
+    username: tennis_user
+    password: tennis_pass
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          charset_name: UTF-8
+    open-in-view: false
+  devtools:
+    livereload:
+      enabled: true
+    add-properties: true
+  web:
+    locale: ru_RU
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+logging:
+  charset:
+    console: UTF-8
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: beans, mappings

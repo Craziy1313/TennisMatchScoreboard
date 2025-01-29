@@ -1,4 +1,4 @@
-package org.example.tennismatchscoreboard.services;
+package org.example.tennismatchscoreboard.constant;
 
 public enum CaseEnum {
 

@@ -1,7 +1,6 @@
 package org.example.tennismatchscoreboard.services.match_score_model;
 
-import org.antlr.v4.runtime.misc.Pair;
-import org.example.tennismatchscoreboard.services.ScoreEnum;
+import org.example.tennismatchscoreboard.constant.ScoreEnum;
 import org.example.tennismatchscoreboard.services.MatchScoreCalculationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,9 +10,9 @@ import java.util.HashMap;
 @Component
 public class Score {
 
-    private HashMap<ScoreEnum,Integer> score;
+    private final HashMap<ScoreEnum,Integer> score;
 
-    private HashMap<ScoreEnum, Boolean> playerPriority; // <boolean>
+    private final HashMap<ScoreEnum, Boolean> playerPriority; // <boolean>
 
     private final MatchScoreCalculationService matchScoreCalculationService;
 
@@ -47,18 +46,12 @@ public class Score {
 
     public void winPlayerOne() {
 
-        Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> scoreAfterWin = matchScoreCalculationService.winPlayerOne(score, playerPriority);
-
-        score = scoreAfterWin.a;
-        playerPriority = scoreAfterWin.b;
+        matchScoreCalculationService.winPlayerOne(score, playerPriority);
     }
 
     public void winPlayerTwo() {
 
-        Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> scoreAfterWin = matchScoreCalculationService.winPlayerTwo(score, playerPriority);
-
-        score = scoreAfterWin.a;
-        playerPriority = scoreAfterWin.b;
+        matchScoreCalculationService.winPlayerTwo(score, playerPriority);
     }
 
     public Integer getScore(ScoreEnum mapKey) {
@@ -70,7 +63,6 @@ public class Score {
     }
 
     public boolean isMatchOver() {
-
         return playerPriority.get(ScoreEnum.END_GAME);
     }
 

@@ -44,29 +44,41 @@
             margin-top: 20px;
             display: flex;
             justify-content: center;
+            align-items: center; /* Выравнивание по вертикали */
         }
 
         .pagination a {
             margin: 0 5px;
-            padding: 8px 12px;
+            padding: 10px 16px;
             text-decoration: none;
             color: white;
             background-color: #007BFF;
             border-radius: 4px;
             border: none;
+            line-height: 1.5;
+            text-align: center;
+            display: inline-block;
+            box-sizing: border-box;
         }
 
         .pagination a.disabled {
             background-color: #ccc;
             pointer-events: none;
+            color: #666;
+            padding: 10px 16px;
+            line-height: 1.5;
+            text-align: center;
+            display: inline-block;
         }
 
         .pagination a:hover:not(.disabled) {
             background-color: #0056b3;
         }
 
+
         .new-match-button {
-            margin-top: 30px;
+            position: relative;
+            top: 50px;
             padding: 10px 20px;
             font-size: 1em;
             color: white;
@@ -118,7 +130,7 @@
     </div>
 
     <!-- Кнопка для возврата на страницу нового матча -->
-    <a href="/new-match" class="new-match-button">Создать новый матч</a>
+    <a href="/new-match" class="new-match-button">Вернуться на страницу нового матча</a>
 </div>
 </body>
 </html>

@@ -18,7 +18,6 @@ public class NewMatchService {
 
     private final OngoingMatchesService ongoingMatchesService;
 
-
     @Autowired
     public NewMatchService(PlayerService playerServices, MatchScoreCalculationService matchScoreCalculationService, OngoingMatchesService ongoingMatchesService) {
         this.playerServices = playerServices;

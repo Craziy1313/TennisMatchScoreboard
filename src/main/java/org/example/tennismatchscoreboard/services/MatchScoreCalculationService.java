@@ -1,28 +1,21 @@
 package org.example.tennismatchscoreboard.services;
 
-import org.antlr.v4.runtime.misc.Pair;
+import org.example.tennismatchscoreboard.constant.ScoreEnum;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static org.example.tennismatchscoreboard.services.ScoreEnum.*;
-import static org.example.tennismatchscoreboard.services.CaseEnum.*;
+import static org.example.tennismatchscoreboard.constant.ScoreEnum.*;
+import static org.example.tennismatchscoreboard.constant.CaseEnum.*;
+import static org.example.tennismatchscoreboard.constant.ServiceConstant.*;
 
 
 @Service
-public class MatchScoreCalculationService {
+public class MatchScoreCalculationService  {
 
     private static final List<ScoreEnum> winPlayerOne;
     private static final List<ScoreEnum> winPlayerTwo;
-
-    private static final int LOVE = 0;
-    private static final int FIRST_POINT = 15;
-    private static final int SECOND_POINT = 30;
-    private static final int THIRD_POINT = 40;
-    private static final int RESET_POINT = 0;
-    private static final int RESET_GAME = 0;
-    private static final int POINT_TO_WIN = 7;
 
     static {
         winPlayerOne = List.of(POINT_PLAYER_ONE, GAME_PLAYER_ONE, SET_PLAYER_ONE,
@@ -37,33 +30,33 @@ public class MatchScoreCalculationService {
                 TIE_BREAK_POINT_PLAYER_TWO, TIE_BREAK_POINT_PLAYER_ONE,
                 END_GAME);
     }
-/**
- * @param score - счет матча
- * @param playerPriority - приоритет игроков
- *
- *
+   /**
+    * @param score - счет матча
+    * @param playerPriority - приоритет игроков
+    *
+    *
      В методах победы игрока сначала будем проверять есть ли флаг на Тай-брейке и тогда уходить в другой метод подсчета
      механика Тай-брейка
      первый у кого будет 7 очков побеждает, проверку надо делать после приплюсования очков,
      Делаем проверку стал ли счет по Геймам 6-6 если да, то уходим в тай брейк, переключаем флаг TIE_BREAK_FLAG
 
- */
-    public Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> winPlayerOne(
+    */
+    public void winPlayerOne(
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority) {
 
         if (playerPriority.get(TIE_BREAK)) {
-            return tieBreak(score, playerPriority, winPlayerOne);
-        }
-        return scoreMethod(score, playerPriority, winPlayerOne);
+            tieBreak(score, playerPriority, winPlayerOne);
+        } else
+            pointScoreMethod(score, playerPriority, winPlayerOne);
     }
 
-    public Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> winPlayerTwo (
+    public void winPlayerTwo (
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority) {
 
         if (playerPriority.get(TIE_BREAK)) {
-            return tieBreak(score, playerPriority, winPlayerTwo);
-        }
-        return scoreMethod(score, playerPriority, winPlayerTwo);
+            tieBreak(score, playerPriority, winPlayerTwo);
+        } else
+            pointScoreMethod(score, playerPriority, winPlayerTwo);
     }
 
     /**
@@ -71,39 +64,9 @@ public class MatchScoreCalculationService {
      * @param winPlayerList подстановка листа в данными по заполнению метода в зависимости от того, какой игрок победил
      */
 
-    private Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> scoreMethod(
+    private void pointScoreMethod(
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority, List<ScoreEnum> winPlayerList) {
 
-        if (score.get(winPlayerList.get(POINT_WIN_PLAYER.getValue())).equals(THIRD_POINT)) {
-            if (score.get(winPlayerList.get(POINT_LOSE_PLAYER.getValue())) <= SECOND_POINT) {
-
-                winGame(score, winPlayerList);
-
-                if (score.get(winPlayerList.get(GAME_WIN_PLAYER.getValue())).equals(6) &&
-                        score.get(winPlayerList.get(GAME_LOSE_PLAYER.getValue())).equals(6))
-                {
-                    playerPriority.put(winPlayerList.get(TIE_BREAK_FLAG.getValue()), true);
-                } else if (score.get(winPlayerList.get(GAME_WIN_PLAYER.getValue())).equals(7)) {
-
-                    winSet(score, winPlayerList);
-
-                    if (score.get(winPlayerList.get(SET_WIN_PLAYER.getValue())).equals(2)) {
-                        playerPriority.put(winPlayerList.get(END_GAME_FLAG.getValue()), true);
-                    }
-                }
-            } else {
-                if (playerPriority.get(winPlayerList.get(PRIORITY_WIN_PLAYER.getValue()))) {
-
-                    winGame(score, winPlayerList);
-
-                    playerPriority.put(winPlayerList.get(PRIORITY_WIN_PLAYER.getValue()), false);
-                } else if (playerPriority.get(winPlayerList.get(PRIORITY_LOSE_PLAYER.getValue()))) {
-                    playerPriority.put(winPlayerList.get(PRIORITY_LOSE_PLAYER.getValue()), false);
-                } else {
-                    playerPriority.put(winPlayerList.get(PRIORITY_WIN_PLAYER.getValue()), true);
-                }
-            }
-        } else {
             switch (score.get(winPlayerList.get(POINT_WIN_PLAYER.getValue()))) {
                 case LOVE:
                     score.put(winPlayerList.get(POINT_WIN_PLAYER.getValue()), FIRST_POINT);
@@ -114,10 +77,65 @@ public class MatchScoreCalculationService {
                 case SECOND_POINT:
                     score.put(winPlayerList.get(POINT_WIN_PLAYER.getValue()), THIRD_POINT);
                     break;
+                case THIRD_POINT:
+                    thirdPointScoreMethod(score, playerPriority, winPlayerList);
+                    break;
             }
         }
 
-        return new Pair<>(score, playerPriority);
+    /**
+     * Метод для подсчета при получении игроком 3 очка в гейме
+     */
+
+    private void thirdPointScoreMethod (
+            HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority, List<ScoreEnum> winPlayerList){
+
+        if (score.get(winPlayerList.get(POINT_LOSE_PLAYER.getValue())) <= SECOND_POINT) {
+            playerWhoScoresThirdPointWinsTheGame(score, playerPriority, winPlayerList);
+        } else {
+            playerEarnsThirdPointTheGamContinues(score, playerPriority, winPlayerList);
+        }
+    }
+
+    /**
+     * Метод для подсчета если получение 3 очка в гейме заканчивает гейм
+     */
+
+    private void playerWhoScoresThirdPointWinsTheGame(
+            HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority, List<ScoreEnum> winPlayerList) {
+        playerWinGame(score, winPlayerList);
+
+        if (score.get(winPlayerList.get(GAME_WIN_PLAYER.getValue())).equals(6) &&
+                score.get(winPlayerList.get(GAME_LOSE_PLAYER.getValue())).equals(6))
+        {
+            playerPriority.put(winPlayerList.get(TIE_BREAK_FLAG.getValue()), true);
+        } else if (score.get(winPlayerList.get(GAME_WIN_PLAYER.getValue())).equals(7)) {
+
+            playerWinSet(score, winPlayerList);
+
+            if (score.get(winPlayerList.get(SET_WIN_PLAYER.getValue())).equals(2)) {
+                playerPriority.put(winPlayerList.get(END_GAME_FLAG.getValue()), true);
+            }
+        }
+    }
+
+    /**
+     * Метод для подсчета если получение 3 очка в гейме не заканчивает гейм
+     */
+
+    private void playerEarnsThirdPointTheGamContinues (
+            HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority, List<ScoreEnum> winPlayerList
+    ){
+        if (playerPriority.get(winPlayerList.get(PRIORITY_WIN_PLAYER.getValue()))) {
+
+            playerWinGame(score, winPlayerList);
+
+            playerPriority.put(winPlayerList.get(PRIORITY_WIN_PLAYER.getValue()), false);
+        } else if (playerPriority.get(winPlayerList.get(PRIORITY_LOSE_PLAYER.getValue()))) {
+            playerPriority.put(winPlayerList.get(PRIORITY_LOSE_PLAYER.getValue()), false);
+        } else {
+            playerPriority.put(winPlayerList.get(PRIORITY_WIN_PLAYER.getValue()), true);
+        }
     }
 
     /**
@@ -125,14 +143,14 @@ public class MatchScoreCalculationService {
      * @param winPlayerList подстановка листа в данными по заполнению метода в зависимости от того, какой игрок победил
      */
 
-    private Pair<HashMap<ScoreEnum, Integer>, HashMap<ScoreEnum, Boolean>> tieBreak(
+    private void tieBreak(
             HashMap <ScoreEnum, Integer> score, HashMap<ScoreEnum, Boolean> playerPriority, List<ScoreEnum> winPlayerList){
 
         score.put(winPlayerList.get(TIE_BREAK_POINT_WIN_PLAYER.getValue()), score.get(winPlayerList.get(TIE_BREAK_POINT_WIN_PLAYER.getValue())) + 1);
 
         if (score.get(winPlayerList.get(TIE_BREAK_POINT_WIN_PLAYER.getValue())).equals(POINT_TO_WIN)) {
 
-            winSet(score, winPlayerList);
+            playerWinSet(score, winPlayerList);
 
             score.put(winPlayerList.get(TIE_BREAK_POINT_WIN_PLAYER.getValue()), RESET_POINT);
             score.put(winPlayerList.get(TIE_BREAK_POINT_LOSE_PLAYER.getValue()), RESET_POINT);
@@ -143,12 +161,13 @@ public class MatchScoreCalculationService {
                 playerPriority.put(winPlayerList.get(END_GAME_FLAG.getValue()), true);
             }
         }
-        return new Pair<>(score, playerPriority);
     }
+
     /**
      *Метод для заполнения очков при победе в Гейме одного из игроков
      */
-    private void winGame(
+
+    private void playerWinGame(
             HashMap <ScoreEnum, Integer> score, List<ScoreEnum> winPlayerList) {
 
         score.put(winPlayerList.get(POINT_WIN_PLAYER.getValue()), RESET_POINT);
@@ -156,11 +175,12 @@ public class MatchScoreCalculationService {
         score.put(winPlayerList.get(GAME_WIN_PLAYER.getValue()), score.get(winPlayerList.get(GAME_WIN_PLAYER.getValue())) + 1);
 
     }
+
     /**
      *Метод для заполнения очков при победе в Сете одного из игроков
      */
 
-    private void winSet (
+    private void playerWinSet(
             HashMap <ScoreEnum, Integer> score, List<ScoreEnum> winPlayerList) {
 
         score.put(winPlayerList.get(POINT_WIN_PLAYER.getValue()), RESET_POINT);

@@ -29,7 +29,6 @@ public class OngoingMatchesService {
         this.finishedMatchesPersistenceService = finishedMatchesPersistenceService;
     }
 
-
     public void updateMatchInfo(UUID uuid, Model model, String winnerName) {
         Match match = getMatch(uuid);
         Player player1 = playerServices.getPlayerById(match.getPlayer1ID()).orElseThrow(PlayerNotFountException::new);
@@ -41,7 +40,7 @@ public class OngoingMatchesService {
         model.addAttribute("score", match.getScore());
 
         if (winnerName != null) {
-            model.addAttribute("winnerName", winnerName); // Добавляем имя победителя, если есть
+            model.addAttribute("winnerName", winnerName);
         }
         System.out.println(model);
     }

@@ -62,6 +62,10 @@
         .view-matches-button:hover {
             background-color: #0056b3;
         }
+        .search-container {
+            margin-top: 20px;
+            text-align: left;
+        }
     </style>
     <script>
         function validateForm() {
@@ -96,6 +100,16 @@
     <a href="/matches">
         <button type="button" class="view-matches-button">Просмотреть все матчи</button>
     </a>
+
+    <div class="search-container">
+        <h3>Поиск игрока по имени</h3>
+        <form action="/matches" method="get">
+            <label for="search">Введите имя игрока:</label>
+            <input type="text" id="search" name="filter_by_player_name" placeholder="Имя игрока" required>
+            <button type="submit">Найти</button>
+        </form>
+    </div>
+
 </div>
 </body>
 </html>

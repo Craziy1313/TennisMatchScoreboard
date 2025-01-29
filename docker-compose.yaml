@@ -2,16 +2,16 @@ version: "3.9"
 services:
   postgres:
     image: postgres:14.8-alpine3.18
+    container_name: tennis_scoreboard_db
     environment:
-      POSTGRES_DB: "userdatabase"
-      POSTGRES_USER: "root"
-      POSTGRES_PASSWORD: "1234"
-      PGDATA: "/var/lib/postgresql/data/pgdata"
-    volumes:
-      - ../2. Init Database:/docker-entrypoint-initdb.d
-      - habrdb-data:/var/lib/postgresql/data
+      POSTGRES_DB: "tennisdb"
+      POSTGRES_USER: "tennis_user"
+      POSTGRES_PASSWORD: "tennis_pass"
     ports:
-      - "5432:5432"
+      - "5400:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
 
 volumes:
-  habrdb-data:
+  postgres_data:

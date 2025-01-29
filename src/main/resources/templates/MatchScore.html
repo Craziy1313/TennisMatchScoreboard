@@ -118,7 +118,7 @@
       <th>Геймы</th>
       <th>Поинты</th>
       <th>Преимущество</th>
-      <th th:if="${score.getPriority(T(org.example.tennismatchscoreboard.services.ScoreEnum).TIE_BREAK)}">Тай брейк</th>
+      <th th:if="${score.getPriority(T(org.example.tennismatchscoreboard.constant.ScoreEnum).TIE_BREAK)}">Тай брейк</th>
     </tr>
     </thead>
     <tbody>
@@ -132,14 +132,14 @@
           </button>
         </form>
       </td>
-      <td id="player1-sets" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).SET_PLAYER_ONE)}">0</td>
-      <td id="player1-games" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).GAME_PLAYER_ONE)}">0</td>
-      <td id="player1-points" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).POINT_PLAYER_ONE)}">0</td>
+      <td id="player1-sets" th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).SET_PLAYER_ONE)}">0</td>
+      <td id="player1-games" th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).GAME_PLAYER_ONE)}">0</td>
+      <td id="player1-points" th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).POINT_PLAYER_ONE)}">0</td>
       <td>
-        <span th:if="${score.getPriority(T(org.example.tennismatchscoreboard.services.ScoreEnum).PRIORITY_PLAYER_ONE)}" class="advantage">Преимущество</span>
+        <span th:if="${score.getPriority(T(org.example.tennismatchscoreboard.constant.ScoreEnum).PRIORITY_PLAYER_ONE)}" class="advantage">Преимущество</span>
       </td>
-      <td th:if="${score.getPriority(T(org.example.tennismatchscoreboard.services.ScoreEnum).TIE_BREAK)}" class="tiebreak"
-          th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).TIE_BREAK_POINT_PLAYER_ONE)}">0</td>
+      <td th:if="${score.getPriority(T(org.example.tennismatchscoreboard.constant.ScoreEnum).TIE_BREAK)}" class="tiebreak"
+          th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).TIE_BREAK_POINT_PLAYER_ONE)}">0</td>
     </tr>
     <tr>
       <td class="player-cell">
@@ -151,14 +151,14 @@
           </button>
         </form>
       </td>
-      <td id="player2-sets" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).SET_PLAYER_TWO)}">0</td>
-      <td id="player2-games" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).GAME_PLAYER_TWO)}">0</td>
-      <td id="player2-points" th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).POINT_PLAYER_TWO)}">0</td>
+      <td id="player2-sets" th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).SET_PLAYER_TWO)}">0</td>
+      <td id="player2-games" th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).GAME_PLAYER_TWO)}">0</td>
+      <td id="player2-points" th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).POINT_PLAYER_TWO)}">0</td>
       <td>
-        <span th:if="${score.getPriority(T(org.example.tennismatchscoreboard.services.ScoreEnum).PRIORITY_PLAYER_TWO)}" class="advantage">Преимущество</span>
+        <span th:if="${score.getPriority(T(org.example.tennismatchscoreboard.constant.ScoreEnum).PRIORITY_PLAYER_TWO)}" class="advantage">Преимущество</span>
       </td>
-      <td th:if="${score.getPriority(T(org.example.tennismatchscoreboard.services.ScoreEnum).TIE_BREAK)}" class="tiebreak"
-          th:text="${score.getScore(T(org.example.tennismatchscoreboard.services.ScoreEnum).TIE_BREAK_POINT_PLAYER_TWO)}">0</td>
+      <td th:if="${score.getPriority(T(org.example.tennismatchscoreboard.constant.ScoreEnum).TIE_BREAK)}" class="tiebreak"
+          th:text="${score.getScore(T(org.example.tennismatchscoreboard.constant.ScoreEnum).TIE_BREAK_POINT_PLAYER_TWO)}">0</td>
     </tr>
     </tbody>
   </table>
